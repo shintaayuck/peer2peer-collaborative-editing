@@ -1,8 +1,11 @@
 package controller;
 
+import model.Character;
+import model.Version;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -19,8 +22,14 @@ public class Client extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         System.out.println("New PEER connection opened");
-//        ControllerNode.getVersionVector().put(serverAddress, 0);
-        this.send("asuhehe".getBytes());
+        Character character = new Character('s', 1.5f, new Version(3,3));
+        byte[] data;
+        try {
+            data = Converter.getByteArray(character);
+            send(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
