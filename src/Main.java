@@ -13,7 +13,32 @@ import static java.lang.Math.floor;
 public class Main{
     public static void main(String[] args) {
         //TODO : Initialize versions based on nodes involved
-        testCRDT();
+        testIdx();
+    }
+    
+    private static void testIdx() {
+        HashMap<Integer, Version> versions = new HashMap<>();
+        versions.put(1, new Version(1,0));
+        versions.put(2, new Version(2,0));
+        versions.put(3, new Version(3,0));
+        versions.put(4, new Version(4,0));
+        CRDT crdt = new CRDT(1, versions);
+        
+        crdt.localInsert(crdt.getPositions(0), 'a');
+        crdt.localInsert(crdt.getPositions(Integer.MAX_VALUE), 'b');
+        crdt.localInsert(crdt.getPositions(Integer.MAX_VALUE), 'c');
+        crdt.localInsert(crdt.getPositions(Integer.MAX_VALUE), 'd');
+        crdt.localInsert(crdt.getPositions(Integer.MAX_VALUE), 'e');
+        crdt.localInsert(crdt.getPositions(Integer.MAX_VALUE), 'f');
+        
+        crdt.localInsert(crdt.getPositions(0), '-');
+        crdt.localInsert(crdt.getPositions(0), ')');
+        crdt.localInsert(crdt.getPositions(0), '(');
+        
+        crdt.localInsert(crdt.getPositions(5), '?');
+        crdt.localInsert(crdt.getPositions(5), '!');
+        
+        
     }
     
     private static void testCRDT() {
@@ -38,11 +63,13 @@ public class Main{
         crdt.localInsert(0.875f,'i');
         crdt2.localInsert(1f,'j');
         crdt.localInsert(-1f,'k');
-        
+        crdt.localInsert(Float.MAX_VALUE, '0');
 
         crdt.localDelete(1f);
         crdt2.localDelete(-2f);
         crdt.localDelete(-1f);
+    
+        System.out.println(crdt.positions);
 
 //        SortedMap<Float, Character> chars = new TreeMap<>();
 //
