@@ -21,15 +21,8 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakeData) {
-        System.out.println("New PEER connection opened");
-        Character character = new Character('s', 1.5f, new Version(3,3));
-        byte[] data;
-        try {
-            data = Converter.getByteArray(character);
-            send(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Connected to server");
+        send(Messenger.getServerNodeAddress());
     }
 
     @Override
@@ -43,16 +36,25 @@ public class Client extends WebSocketClient {
     @Override
     public void onMessage(ByteBuffer bytes) {
         super.onMessage(bytes);
+        try {
+            Character data = (Character) Converter.getObject(bytes);
+            System.out.println(data.getPosition());
+            System.out.println(data.getValue());
+            System.out.println(data.getInsert());
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
-
-
 
     @Override
     public void onMessage(String message) {
-        System.out.println("received message: " + message);
-
-//        CRDT crdt = parseCRDT(message);
-//        updateVersionVector(crdt);
+        System.out.println("Client received message: " + message);
+        try {
+            Messenger.ConnectToNode(message);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -60,11 +62,4 @@ public class Client extends WebSocketClient {
         System.err.println("an error occurred:" + ex);
     }
 
-
-    public static void main(String[] args) throws URISyntaxException {
-        String signalServerAddress = "ws://localhost:8888";
-
-        Client client = new Client(new URI(signalServerAddress), signalServerAddress);
-        client.connect();
-    }
 }
