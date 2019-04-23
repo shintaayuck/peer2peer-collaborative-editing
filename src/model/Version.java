@@ -3,19 +3,19 @@ package model;
 import java.io.Serializable;
 
 public class Version implements Serializable {
-    private Integer idNode;
+    private String idNode;
     private Integer counter;
     
-    public Version(Integer idNode, Integer counter) {
+    public Version(String idNode, Integer counter) {
         this.idNode = idNode;
         this.counter = counter;
     }
     
-    public Integer getIdNode() {
+    public String getIdNode() {
         return idNode;
     }
     
-    public void setIdNode(Integer idNode) {
+    public void setIdNode(String idNode) {
         this.idNode = idNode;
     }
     

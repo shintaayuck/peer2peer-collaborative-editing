@@ -38,12 +38,6 @@ public class Server extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, ByteBuffer message) {
         super.onMessage(conn, message);
-        try {
-            Character s = (Character) Converter.getObject(message.array());
-            System.out.println(s.getPosition());
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

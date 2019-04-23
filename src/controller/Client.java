@@ -5,6 +5,7 @@ import model.Version;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+import javax.naming.ldap.Control;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,7 +30,8 @@ public class Client extends WebSocketClient {
     public void onClose(int code, String reason, boolean remote) {
         System.out.println("closed with exit code " + code + " additional info: " + reason);
 
-//        ControllerNode.getClientPeerNodes().remove(serverAddress);
+        Messenger.getClientNodes().remove(serverAddress);
+        Messenger.getServerAddressList().remove(serverAddress);
 //        ControllerNode.getVersionVector().remove(serverAddress);
     }
 
@@ -37,11 +39,12 @@ public class Client extends WebSocketClient {
     public void onMessage(ByteBuffer bytes) {
         super.onMessage(bytes);
         try {
-            Character data = (Character) Converter.getObject(bytes);
-            System.out.println(data.getPosition());
-            System.out.println(data.getValue());
-            System.out.println(data.getInsert());
-
+            Character c = (Character) Converter.getObject(bytes);
+            if (c.getInsert()) {
+                Controller.getCrdt().remoteInsert(c);
+            } else {
+                Controller.getCrdt().remoteDelete(c);
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

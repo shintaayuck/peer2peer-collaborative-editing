@@ -18,14 +18,14 @@ public class Main{
     
     private static void testCRDT() {
     
-        HashMap<Integer, Version> versions = new HashMap<>();
-        versions.put(1, new Version(1,0));
-        versions.put(2, new Version(2,0));
-        versions.put(3, new Version(3,0));
-        versions.put(4, new Version(4,0));
-        CRDT crdt = new CRDT(1, versions);
+        HashMap<String, Version> versions = new HashMap<>();
+        versions.put("1", new Version("1",0));
+        versions.put("2", new Version("2",0));
+        versions.put("3", new Version("3",0));
+        versions.put("4", new Version("4",0));
+        CRDT crdt = new CRDT("1", versions);
     
-        CRDT crdt2 = new CRDT(2, versions);
+        CRDT crdt2 = new CRDT("2", versions);
         
         crdt.localInsert(0f, 'a');
         crdt2.localInsert(0f, 'b');

@@ -5,10 +5,12 @@ import model.Version;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 
+import javax.naming.ldap.Control;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 public class Messenger extends Server{
@@ -18,10 +20,11 @@ public class Messenger extends Server{
 
     private static String serverNodeAddress;
 
-    public Messenger(){
-        super(new InetSocketAddress("localhost", new Random().nextInt(10000)+40000));
+    public Messenger(String hostname, int port){
+        super(new InetSocketAddress(hostname, port));
 
         serverNodeAddress = this.getWebSocketAddress();
+        System.out.println(serverNodeAddress);
     }
 
     public static String getServerNodeAddress() {
@@ -32,9 +35,12 @@ public class Messenger extends Server{
         return clientNodes;
     }
 
+    public static Set<String> getServerAddressList() { return serverAddressList; }
+
     @Override
     public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
         super.onOpen(conn, clientHandshake);
+
 
         for (String s : serverAddressList) {
             conn.send(s);
@@ -46,9 +52,21 @@ public class Messenger extends Server{
         super.onMessage(conn, message);
         try {
             ConnectToNode(message);
+            Controller.addNodeVersion(message);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onMessage(WebSocket conn, ByteBuffer message) {
+        super.onMessage(conn, message);
+//        try {
+//            Character c = (Character) Converter.getObject(message.array());
+//            Controller.getCrdt().remoteInsert(c);
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void ConnectToNode(String address) throws URISyntaxException {
@@ -68,18 +86,19 @@ public class Messenger extends Server{
     }
 
     public static void main(String[] args) throws URISyntaxException {
-        Messenger messenger = new Messenger();
-        ConnectToNode("ws://localhost:44087");
-        try
-        {
-            Thread.sleep(5000);
-            messenger.BroadcastObject(new Character('a', 1.5f, new Version(0, 0)));
-        }
-        catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Messenger messenger = new Messenger("localhost", 42313);
+//        Messenger messenger = new Messenger();
+//        ConnectToNode("ws://localhost:44087");
+//        try
+//        {
+//            Thread.sleep(5000);
+//            messenger.BroadcastObject(new Character('a', 1.5f, new Version(0, 0)));
+//        }
+//        catch(InterruptedException ex)
+//        {
+//            Thread.currentThread().interrupt();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }
