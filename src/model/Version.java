@@ -1,6 +1,8 @@
 package model;
 
-public class Version {
+import java.io.Serializable;
+
+public class Version implements Serializable {
     private Integer idNode;
     private Integer counter;
     
@@ -24,4 +26,5 @@ public class Version {
     public void setCounter(Integer counter) {
         this.counter = counter;
     }
+
 }
