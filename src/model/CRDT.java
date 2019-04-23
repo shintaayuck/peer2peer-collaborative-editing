@@ -27,7 +27,6 @@ public class CRDT {
         Character c = new Character(value, position, new Version(this.getIdNode(), counter++));
         document.put(position, c);
         broadcastChar(c);
-        
     }
     
     private Float setCharPosition(Float nextIdx) {
@@ -38,7 +37,6 @@ public class CRDT {
             return (float) ceil(document.lastKey()+1);
         } else if (nextIdx.equals(document.firstKey())) {
             return (float) floor(document.firstKey()-1);
-//            return ((document.firstKey() % 1 == 0) ? document.firstKey()-1 : (float) floor(document.firstKey()));
         } else {
           Float low = ((TreeMap<Float,Character>)document).lowerKey(nextIdx) != null ?
               ((TreeMap<Float,Character>)document).lowerKey(nextIdx) : 0f;
@@ -67,13 +65,6 @@ public class CRDT {
             System.out.print(c1.getPosition() + " ");
         }
         System.out.println("");
-        for (Character c1:
-            cs) {
-            System.out.print(c1.getInsertVersion().getCounter() + " ");
-        }
-    
-        System.out.println("");
-        System.out.println("");
         
         if (!c.getInsert()) {
             System.out.println("DELETE " + c.getDeleteVersion().getCounter());
@@ -82,7 +73,7 @@ public class CRDT {
     
     public void remoteInsert(Character c) {
         document.put(c.getPosition(),c);
-        Version version = versions.get(c.getInsertVersion());
+        Version version = versions.get(c.getInsertVersion().getIdNode());
         version.setCounter(
             c.getInsertVersion().getCounter() < version.getCounter() ?
                 version.getCounter() : c.getInsertVersion().getCounter());

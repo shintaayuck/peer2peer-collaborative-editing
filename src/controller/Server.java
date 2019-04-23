@@ -1,9 +1,11 @@
 package controller;
 
+import model.Character;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -35,10 +37,12 @@ public class Server extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, ByteBuffer message) {
         super.onMessage(conn, message);
-        byte[] b = new byte[message.remaining()];
-        message.get(b);
-        System.out.println(new String(b));
-        System.out.println("ASU");
+        try {
+            Character s = (Character) Converter.getObject(message.array());
+            System.out.println(s.getPosition());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -48,7 +52,7 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("Node started");
+        System.out.println("Node started " + getPort());
     }
 
     public String getWebSocketAddress() {
