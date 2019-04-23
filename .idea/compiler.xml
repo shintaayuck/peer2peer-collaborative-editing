@@ -8,12 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="p2p-crdt" />
-        <module name="p2p_crdt" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="p2p-crdt" target="7" />
-      <module name="p2p_crdt" target="7" />
     </bytecodeTargetLevel>
   </component>
 </project>

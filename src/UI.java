@@ -4,37 +4,36 @@ import java.io.*;
 import java.awt.event.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.text.*;
+
 class TextEditor extends JFrame implements ActionListener {
-    // Text component
-    JTextArea t;
-
-    // Frame
-    JFrame f;
-
+    JTextArea textArea; // Text component
+    JFrame frameEditor; // Frame
+    String textCache; // save last Text version
     // Constructor
-    TextEditor()
-    {
+    TextEditor(){
         // Create a frame
-        f = new JFrame("Text Editor");
-
+        frameEditor = new JFrame("Text Editor");
         try {
-            // Set metl look and feel
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-
-            // Set theme to ocean
-            MetalLookAndFeel.setCurrentTheme(new OceanTheme());
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel"); // Set metl look and feel
+            MetalLookAndFeel.setCurrentTheme(new OceanTheme()); // Set theme to ocean
         }
         catch (Exception e) {
         }
-
-        // Text component
-        t = new JTextArea();
-
-        // Create a menubar
-        JMenuBar mb = new JMenuBar();
-
-        // Create amenu for menu
-        JMenu m1 = new JMenu("File");
+        
+        textArea = new JTextArea(); // Text component
+        textArea.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e){	
+                textCache = textArea.getText()+e.getKeyChar();
+				System.out.println(textCache);
+			}
+			public void keyPressed(KeyEvent e){
+			}
+			public void keyReleased(KeyEvent e){
+		    }			
+		});
+        
+        JMenuBar mb = new JMenuBar(); // Create a menubar
+        JMenu m1 = new JMenu("File"); // Create amenu for menu
 
         // Create menu items
         JMenuItem mi1 = new JMenuItem("New");
@@ -78,25 +77,29 @@ class TextEditor extends JFrame implements ActionListener {
         mb.add(m2);
         mb.add(mc);
 
-        f.setJMenuBar(mb);
-        f.add(t);
-        f.setSize(500, 500);
-        f.show();
+        frameEditor.setJMenuBar(mb);
+        frameEditor.add(textArea);
+        frameEditor.setSize(500, 500);
+        frameEditor.show();
     }
+
+	private void actionCancelled(){
+		JOptionPane.showMessageDialog(frameEditor, "Cancelled !!");
+	}
 
     // If a button is pressed
     public void actionPerformed(ActionEvent e)
     {
         String s = e.getActionCommand();
-
+		System.out.println(s);
         if (s.equals("cut")) {
-            t.cut();
+            textArea.cut();
         }
         else if (s.equals("copy")) {
-            t.copy();
+            textArea.copy();
         }
         else if (s.equals("paste")) {
-            t.paste();
+            textArea.paste();
         }
         else if (s.equals("Save")) {
             // Create an object of JFileChooser class
@@ -118,26 +121,26 @@ class TextEditor extends JFrame implements ActionListener {
                     BufferedWriter w = new BufferedWriter(wr);
 
                     // Write
-                    w.write(t.getText());
+                    w.write(textArea.getText());
 
                     w.flush();
                     w.close();
                 }
                 catch (Exception evt) {
-                    JOptionPane.showMessageDialog(f, evt.getMessage());
+                    JOptionPane.showMessageDialog(frameEditor, evt.getMessage());
                 }
             }
             // If the user cancelled the operation
             else
-                JOptionPane.showMessageDialog(f, "the user cancelled the operation");
+                actionCancelled();
         }
         else if (s.equals("Print")) {
             try {
                 // print the file
-                t.print();
+                textArea.print();
             }
             catch (Exception evt) {
-                JOptionPane.showMessageDialog(f, evt.getMessage());
+                JOptionPane.showMessageDialog(frameEditor, evt.getMessage());
             }
         }
         else if (s.equals("Open")) {
@@ -153,45 +156,37 @@ class TextEditor extends JFrame implements ActionListener {
                 File fi = new File(j.getSelectedFile().getAbsolutePath());
 
                 try {
-                    // String
-                    String s1 = "", sl = "";
-
-                    // File reader
-                    FileReader fr = new FileReader(fi);
-
-                    // Buffered reader
-                    BufferedReader br = new BufferedReader(fr);
-
-                    // Initilize sl
-                    sl = br.readLine();
+                    String s1 = "", sl = ""; // String
+                    FileReader fr = new FileReader(fi); // File reader
+                    BufferedReader br = new BufferedReader(fr); // Buffered reader
+                    sl = br.readLine(); // Initilize sl
 
                     // Take the input from the file
                     while ((s1 = br.readLine()) != null) {
                         sl = sl + "\n" + s1;
                     }
-
-                    // Set the text
-                    t.setText(sl);
+                    textArea.setText(sl); // Set text from input
                 }
                 catch (Exception evt) {
-                    JOptionPane.showMessageDialog(f, evt.getMessage());
+                    JOptionPane.showMessageDialog(frameEditor, evt.getMessage());
                 }
             }
             // If the user cancelled the operation
             else
-                JOptionPane.showMessageDialog(f, "the user cancelled the operation");
+                actionCancelled();
         }
         else if (s.equals("New")) {
-            t.setText("");
+            textArea.setText("");
         }
         else if (s.equals("close")) {
-            f.setVisible(false);
+            frameEditor.setVisible(false);
         }
     }
 
     // Main class
-    public static void UI(String args[])
-    {
+    public static void main(String args[]){
         TextEditor editor = new TextEditor();
+        
+
     }
 }
