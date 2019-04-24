@@ -16,7 +16,7 @@ public class Server extends WebSocketServer {
 
     public Server(InetSocketAddress address) {
         super(address);
-        this.webSocketAddress = "ws://" + address.getHostName() + ":" + address.getPort();
+        this.webSocketAddress = "ws://" + address.getHostString() + ":" + address.getPort();
         start();
     }
 

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Character implements Serializable {
     private char value;
     private Float position;
+    private Float nextIdx;
     private Boolean isInsert;
     private Version insertVersion;
     private Version deleteVersion;
@@ -15,6 +16,14 @@ public class Character implements Serializable {
         this.isInsert = true;
         this.insertVersion = insertVersion;
         this.deleteVersion = null;
+    }
+    
+    public void setNextIdx(Float nextIdx) {
+        this.nextIdx = nextIdx;
+    }
+    
+    public Float getNextIdx() {
+        return nextIdx;
     }
     
     public char getValue() {

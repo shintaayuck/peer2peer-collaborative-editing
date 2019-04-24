@@ -14,10 +14,12 @@ public class CRDT {
     public String idNode;
     public HashMap<String, Version> versions;
     public static ArrayList<Float> positions = new ArrayList<>();
+    private HashMap<Float, Character> deletionBuffers;
 
     public CRDT(String idNode, HashMap<String, Version> versions) {
         this.idNode = idNode;
         this.versions = versions;
+        this.deletionBuffers = new HashMap<>();
     }
     
     public String getIdNode() {
@@ -27,7 +29,7 @@ public class CRDT {
     public Float getPositions(Integer idx) {
         if (positions.size() == 0 ) {
             return 0f;
-        } else if (idx == Integer.MAX_VALUE) {
+        } else if (idx == Integer.MAX_VALUE || idx == positions.size()) {
             return Float.MAX_VALUE;
         } else {
             return positions.get(idx);
@@ -37,8 +39,12 @@ public class CRDT {
     public Character localInsert(Float nextIdx, char value) {
         Float position = setCharPosition(nextIdx);
         Character c = new Character(value, position, new Version(this.getIdNode(), counter++));
+        c.setNextIdx(nextIdx);
         document.put(position, c);
         broadcastChar(c);
+        if (deletionBuffers.containsKey(c.getPosition())) {
+        
+        }
         return(c);
     }
 
@@ -92,6 +98,15 @@ public class CRDT {
     
     public void remoteInsert(Character c) {
         document.put(c.getPosition(),c);
+        if (positions.size() == 0) {
+            positions.add(c.getPosition());
+        } else if (c.getNextIdx() == Float.MAX_VALUE) {
+            positions.add(c.getPosition());
+        } else if (c.getNextIdx().equals(document.firstKey())) {
+            positions.add(0, c.getPosition());
+        } else {
+            positions.add(positions.indexOf(c.getNextIdx()), c.getPosition());
+        }
         Version version = versions.get(c.getInsertVersion().getIdNode());
         version.setCounter(
             c.getInsertVersion().getCounter() < version.getCounter() ?
@@ -103,7 +118,7 @@ public class CRDT {
         
         if (c.getInsertVersion().getIdNode() != this.idNode &&
             versions.get(c.getInsertVersion().getIdNode()).getCounter() < c.getInsertVersion().getCounter())  {
-                //Add Deletion Buffer
+                deletionBuffers.put(c.getPosition(), c);
         } else {
             document.remove(c.getPosition());
             Version version = versions.get(c.getDeleteVersion().getIdNode());

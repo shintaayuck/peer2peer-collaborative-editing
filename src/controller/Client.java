@@ -32,7 +32,6 @@ public class Client extends WebSocketClient {
 
         Messenger.getClientNodes().remove(serverAddress);
         Messenger.getServerAddressList().remove(serverAddress);
-//        ControllerNode.getVersionVector().remove(serverAddress);
     }
 
     @Override

@@ -30,27 +30,32 @@ public class Controller {
         crdt.versions.put(id, new Version(id, 0));
     }
 
-    public void insert(Float nextIdx, char value) throws IOException {
-        getMessenger().BroadcastObject(crdt.localInsert(nextIdx, value));
+    public void insert(Integer nextIdx, char value) throws IOException {
+        getMessenger().BroadcastObject(crdt.localInsert(crdt.getPositions(nextIdx), value));
     }
 
-    public void delete(Float idx) throws IOException {
-        getMessenger().BroadcastObject(crdt.localDelete(idx));
+    public void delete(Integer idx) throws IOException {
+        getMessenger().BroadcastObject(crdt.localDelete(crdt.getPositions(idx)));
     }
 
     public static void main(String[] args) throws URISyntaxException, InterruptedException, IOException {
         BasicConfigurator.configure();
 
         // NODE 1
-//        Controller controller = new Controller("localhost", 40001);
+//        Controller controller = new Controller("localhost", 40002);
 
 //         NODE 2
-        Controller controller = new Controller("localhost", 40002);
-        Messenger.ConnectToNode("ws://localhost:40001");
-        Thread.sleep(5000);
-        controller.insert(0f,'a');
-        controller.insert(0f,'b');
-        controller.insert(0f,'c');
-        controller.delete(-1.0f);
+        Controller controller = new Controller("192.168.43.85", 40003);
+//        System.out.println(controller.messenger.getAddress());
+////        Messenger.ConnectToNode("ws://192.168.43.85:40001");
+        Thread.sleep(10000);
+        controller.insert(0,'a');
+        controller.insert(0,'b');
+        controller.insert(0,'c');
+        controller.insert(0,'a');
+        controller.insert(Integer.MAX_VALUE,'b');
+        controller.insert(0,'c');
+        
+////        controller.delete(-1.0f);
     }
 }

@@ -24,7 +24,6 @@ public class Messenger extends Server{
         super(new InetSocketAddress(hostname, port));
 
         serverNodeAddress = this.getWebSocketAddress();
-        System.out.println(serverNodeAddress);
     }
 
     public static String getServerNodeAddress() {
@@ -61,12 +60,6 @@ public class Messenger extends Server{
     @Override
     public void onMessage(WebSocket conn, ByteBuffer message) {
         super.onMessage(conn, message);
-//        try {
-//            Character c = (Character) Converter.getObject(message.array());
-//            Controller.getCrdt().remoteInsert(c);
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public static void ConnectToNode(String address) throws URISyntaxException {
@@ -84,21 +77,5 @@ public class Messenger extends Server{
         byte[] data = Converter.getByteArray(object);
         broadcast(data);
     }
-
-    public static void main(String[] args) throws URISyntaxException {
-        Messenger messenger = new Messenger("localhost", 42313);
-//        Messenger messenger = new Messenger();
-//        ConnectToNode("ws://localhost:44087");
-//        try
-//        {
-//            Thread.sleep(5000);
-//            messenger.BroadcastObject(new Character('a', 1.5f, new Version(0, 0)));
-//        }
-//        catch(InterruptedException ex)
-//        {
-//            Thread.currentThread().interrupt();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
+    
 }
