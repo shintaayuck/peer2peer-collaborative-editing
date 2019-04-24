@@ -36,6 +36,16 @@
 
 # Laporan
 ## Cara Kerja dan Arsitektur Program
+#### Cara Kerja :
+Program bekerja di atas Java Swing dan menggunakan WebSocket TCP. Pertama-tama, program dijalankan dengan masukan *Host Port* dan *Destination URI* dari terminal. 
+Kemudian program melakukan konfigurasi socket untuk dapat berjalan secara paralel. Kemudian program menampilkan aplikasi ke layar dalam bentuk Java Swing.
+Ketika ada *trigger* masukan dari *keyboard* pengguna pada salah, program menentukan jenis masukan keyboard pengguna dan memberikan indeks & karakter yang di masukkan oleh pengguna ke Controller.
+Setelah itu Controller mengirimkan *BroadCast* dari Messenger dan mengkonversi jenis karakter dan indeks menjadi bentuk byte untuk dikirim melalui server.
+Setelah dikirim, Port Penerima akan mendapatkan masukan dari broadcast server dan kemudian mengkonversi kembali pesan yang diterima menjadi masukan indeks dan karakter.
+Dari masukan yang telah diterima dari server, Controller penerima melakukan pengecekan versi pengubahan terlebih dahulu sebelum melakukan pengubahan karakter text pada program.
+Setelah versi yang diperiksa telah valid dan sesuai, maka controller akan melakukan pengubahan data dan menampilkannya kembali dalam bentuk teks di GUI.
+
+#### Arsitektur Program :
 
 
 ## Desain Struktur Data
