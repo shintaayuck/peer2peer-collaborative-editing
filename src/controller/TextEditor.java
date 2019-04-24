@@ -1,5 +1,6 @@
 package controller;
 
+import model.Character;
 import org.apache.log4j.BasicConfigurator;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ class TextEditor extends JFrame implements ActionListener {
 
             }
             public void keyPressed(KeyEvent e){ //Not used
-                if (e.getExtendedKeyCode()!=8 && Character.isAlphabetic(e.getKeyChar())) {
+                if (e.getExtendedKeyCode()!=8 && java.lang.Character.isAlphabetic(e.getKeyChar())) {
                     try {
                         Controller.insert(textArea.getCaretPosition(), e.getKeyChar());
                     } catch (IOException e1) {
@@ -63,6 +64,11 @@ class TextEditor extends JFrame implements ActionListener {
         frameEditor.show();
     }
 
+    public void insert(Character c, Integer idx) {
+        textArea.insert(String.valueOf(c.getValue()), idx);
+    }
+    
+    
 	private void actionCancelled(){
 		JOptionPane.showMessageDialog(frameEditor, "Cancelled !!");
 	}

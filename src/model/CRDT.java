@@ -71,6 +71,7 @@ public class CRDT {
     
     public Character localDelete(Float idx) {
         Character c = document.remove(idx);
+        positions.remove(idx);
         Version version = new Version(idNode, counter++);
         c.delete(version);
         broadcastChar(c);
@@ -96,7 +97,7 @@ public class CRDT {
         }
     }
     
-    public void remoteInsert(Character c) {
+    public Integer remoteInsert(Character c) {
         document.put(c.getPosition(),c);
         if (positions.size() == 0) {
             positions.add(c.getPosition());
@@ -112,12 +113,14 @@ public class CRDT {
             c.getInsertVersion().getCounter() < version.getCounter() ?
                 version.getCounter() : c.getInsertVersion().getCounter());
         broadcastChar(c);
+        return positions.indexOf(c.getPosition());
     }
     
-    public void remoteDelete(Character c) {
-        
+    public Integer remoteDelete(Character c) {
         if (versions.get(c.getInsertVersion().getIdNode()).getCounter() < c.getInsertVersion().getCounter())  {
-                deletionBuffers.put(c.getPosition(), c);
+            deletionBuffers.put(c.getPosition(), c);
+            broadcastChar(c);
+            return Integer.MIN_VALUE;
         } else {
             document.remove(c.getPosition());
             Version version = versions.get(c.getDeleteVersion().getIdNode());
@@ -125,7 +128,10 @@ public class CRDT {
                 version.getCounter() < c.getDeleteVersion().getCounter() ?
                     c.getDeleteVersion().getCounter() : version.getCounter()
             );
+            Integer intIdx = positions.indexOf(c.getPosition());
+            positions.remove(c.getPosition());
+            broadcastChar(c);
+            return intIdx;
         }
-        broadcastChar(c);
     }
 }
