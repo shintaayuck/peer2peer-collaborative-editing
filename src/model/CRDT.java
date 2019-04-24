@@ -116,8 +116,7 @@ public class CRDT {
     
     public void remoteDelete(Character c) {
         
-        if (c.getInsertVersion().getIdNode() != this.idNode &&
-            versions.get(c.getInsertVersion().getIdNode()).getCounter() < c.getInsertVersion().getCounter())  {
+        if (versions.get(c.getInsertVersion().getIdNode()).getCounter() < c.getInsertVersion().getCounter())  {
                 deletionBuffers.put(c.getPosition(), c);
         } else {
             document.remove(c.getPosition());

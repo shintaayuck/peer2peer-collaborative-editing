@@ -5,6 +5,7 @@ import model.Version;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
@@ -45,7 +46,7 @@ public class Controller {
 //        Controller controller = new Controller("localhost", 40002);
 
 //         NODE 2
-        Controller controller = new Controller("192.168.43.85", 40003);
+        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40000);
 //        System.out.println(controller.messenger.getAddress());
 ////        Messenger.ConnectToNode("ws://192.168.43.85:40001");
         Thread.sleep(10000);
@@ -56,6 +57,8 @@ public class Controller {
         controller.insert(Integer.MAX_VALUE,'b');
         controller.insert(0,'c');
         
+        Thread.sleep(3000);
+        controller.delete(1);
 ////        controller.delete(-1.0f);
     }
 }
