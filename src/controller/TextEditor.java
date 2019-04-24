@@ -66,7 +66,7 @@ class TextEditor extends JFrame implements ActionListener {
 
     public void insert(Character c, Integer idx) {
         textArea.insert(String.valueOf(c.getValue()), idx);
-        if (idx >= textArea.getCaretPosition()) {
+        if (idx <= textArea.getCaretPosition()) {
             textArea.setCaretPosition(textArea.getCaretPosition()+1);
         }
     }
