@@ -69,6 +69,7 @@ class TextEditor extends JFrame implements ActionListener {
     }
     
     public void delete(Integer idx) {
+        System.out.println(idx);
         textArea.replaceRange("",idx,idx+1);
     }
     

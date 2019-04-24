@@ -1,13 +1,10 @@
 package controller;
 
-import model.Character;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
 public class Server extends WebSocketServer {
@@ -47,7 +44,7 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("Server started on port " + getPort());
+        System.out.println("Server " + getWebSocketAddress() + " started");
     }
 
     public String getWebSocketAddress() {

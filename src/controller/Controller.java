@@ -2,11 +2,8 @@ package controller;
 
 import model.CRDT;
 import model.Version;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
@@ -42,27 +39,5 @@ public class Controller {
 
     public static void delete(Integer idx) throws IOException {
         getMessenger().BroadcastObject(crdt.localDelete(crdt.getPositions(idx)));
-    }
-
-    public static void main(String[] args) throws URISyntaxException, InterruptedException, IOException {
-        BasicConfigurator.configure();
-
-        // NODE 1
-//        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40000);
-//        System.out.println(controller.getMessenger().getWebSocketAddress());
-//         NODE 2
-        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40001);
-        Messenger.ConnectToNode("ws://10.5.25.161:40000");
-//        Thread.sleep(10000);
-//        controller.insert(0,'a');
-//        controller.insert(0,'b');
-//        controller.insert(0,'c');
-//        controller.insert(0,'a');
-//        controller.insert(Integer.MAX_VALUE,'b');
-//        controller.insert(0,'c');
-//
-//        Thread.sleep(3000);
-//        controller.delete(1);
-////        controller.delete(-1.0f);
     }
 }

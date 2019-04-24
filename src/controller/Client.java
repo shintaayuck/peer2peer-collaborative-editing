@@ -40,7 +40,6 @@ public class Client extends WebSocketClient {
             if (c.getInsert()) {
                 Controller.getTextEditor().insert(c, Controller.getCrdt().remoteInsert(c));
             } else {
-                Controller.getCrdt().remoteDelete(c);
                 Controller.getTextEditor().delete(Controller.getCrdt().remoteDelete(c));
             }
         } catch (IOException | ClassNotFoundException e) {
