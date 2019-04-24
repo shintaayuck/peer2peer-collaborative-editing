@@ -5,25 +5,27 @@ import model.Version;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 public class Controller {
     private static CRDT crdt;
-    private Messenger messenger;
+    private static Messenger messenger;
+    private TextEditor textEditor;
 
-    public Controller(String host, Integer port) {
+    public Controller(String host, Integer port) throws UnknownHostException {
         String id = "ws://" + host + ":" + port;
         HashMap<String, Version> versions = new HashMap<>();
         versions.put(id, new Version(id, 0));
         crdt = new CRDT(id, versions);
         messenger = new Messenger(host, port);
+        textEditor = new TextEditor();
     }
 
     public static CRDT getCrdt() { return crdt; }
 
-    public Messenger getMessenger(){
+    public static Messenger getMessenger(){
         return messenger;
     }
 
@@ -31,27 +33,22 @@ public class Controller {
         crdt.versions.put(id, new Version(id, 0));
     }
 
-    public void insert(Integer nextIdx, char value) throws IOException {
+    public static void insert(Integer nextIdx, char value) throws IOException {
         getMessenger().BroadcastObject(crdt.localInsert(crdt.getPositions(nextIdx), value));
     }
 
-    public void delete(Integer idx) throws IOException {
+    public static void delete(Integer idx) throws IOException {
         getMessenger().BroadcastObject(crdt.localDelete(crdt.getPositions(idx)));
-    }
-    
-    public static void connect() throws URISyntaxException {
-        Messenger.ConnectToNode("ws://192.168.43.85:40002");
-        
     }
 
     public static void main(String[] args) throws URISyntaxException, InterruptedException, IOException {
         BasicConfigurator.configure();
 
         // NODE 1
-//        Controller controller = new Controller("localhost", 40002);
+        Controller controller = new Controller("localhost", 40003);
 
 //         NODE 2
-        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40002);
+//        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40002);
 //        System.out.println(controller.messenger.getAddress());
 //        Messenger.ConnectToNode("ws://192.168.43.85:40000");
 //        Thread.sleep(10000);

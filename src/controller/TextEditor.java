@@ -1,30 +1,24 @@
-import controller.Controller;
+package controller;
+
 import org.apache.log4j.BasicConfigurator;
 
-import java.awt.*;
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.*;
-import java.awt.event.*;
-import java.net.InetAddress;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import javax.swing.plaf.metal.*;
-import javax.swing.text.*;
 
 class TextEditor extends JFrame implements ActionListener {
     JTextArea textArea; // Text component
     JFrame frameEditor; // Frame
     String textCache = ""; // save last Text version
-    Controller controller;
     // Constructor
     TextEditor() throws UnknownHostException {
     
-        controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40001);
-        try {
-            controller.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
         // Create a frame
         frameEditor = new JFrame("Text Editor");
         try {
@@ -40,9 +34,9 @@ class TextEditor extends JFrame implements ActionListener {
 
             }
             public void keyPressed(KeyEvent e){ //Not used
-                if (e.getExtendedKeyCode()!=8 && (e.getExtendedKeyCode() < 37 || e.getExtendedKeyCode() > 40)) {
+                if (e.getExtendedKeyCode()!=8 && Character.isAlphabetic(e.getKeyChar())) {
                     try {
-                        controller.insert(textArea.getCaretPosition(), e.getKeyChar());
+                        Controller.insert(textArea.getCaretPosition(), e.getKeyChar());
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -53,7 +47,7 @@ class TextEditor extends JFrame implements ActionListener {
             public void keyReleased(KeyEvent e){ // Not used
                 if (e.getExtendedKeyCode()==8 && !textArea.getText().equals(textCache)) {
                     try {
-                        controller.delete(textArea.getCaretPosition());
+                        Controller.delete(textArea.getCaretPosition());
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -168,7 +162,5 @@ class TextEditor extends JFrame implements ActionListener {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-    
-    
     }
 }
