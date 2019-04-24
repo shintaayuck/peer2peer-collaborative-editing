@@ -17,11 +17,12 @@ public class Server extends WebSocketServer {
     public Server(InetSocketAddress address) {
         super(address);
         this.webSocketAddress = "ws://" + address.getHostName() + ":" + address.getPort();
+        start();
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
-        System.out.println("New connection to " + conn.getRemoteSocketAddress());
+        System.out.println("New connection from " + conn.getRemoteSocketAddress());
     }
 
     @Override
@@ -31,18 +32,12 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println("Received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+        System.out.println("Server Received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
     }
 
     @Override
     public void onMessage(WebSocket conn, ByteBuffer message) {
         super.onMessage(conn, message);
-        try {
-            Character s = (Character) Converter.getObject(message.array());
-            System.out.println(s.getPosition());
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -52,18 +47,12 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("Node started " + getPort());
+        System.out.println("Server started on port " + getPort());
     }
 
     public String getWebSocketAddress() {
         return webSocketAddress;
     }
 
-    public static void main(String[] args) throws URISyntaxException {
-        String host = "localhost";
 
-        Server server = new Server(new InetSocketAddress(host, 8888));
-
-        server.start();
-    }
 }

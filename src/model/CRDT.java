@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -10,46 +11,64 @@ import static java.lang.Math.floor;
 public class CRDT {
     public static SortedMap<Float, Character> document = new TreeMap<>();
     public static int counter = 0;
-    public int idNode;
-    public HashMap<Integer, Version> versions;
-    
-    public CRDT(int idNode, HashMap<Integer, Version> versions) {
+    public String idNode;
+    public HashMap<String, Version> versions;
+    public static ArrayList<Float> positions = new ArrayList<>();
+
+    public CRDT(String idNode, HashMap<String, Version> versions) {
         this.idNode = idNode;
         this.versions = versions;
     }
     
-    public int getIdNode() {
+    public String getIdNode() {
         return idNode;
     }
     
-    public void localInsert(Float nextIdx, char value) {
+    public Float getPositions(Integer idx) {
+        if (positions.size() == 0 ) {
+            return 0f;
+        } else if (idx == Integer.MAX_VALUE) {
+            return Float.MAX_VALUE;
+        } else {
+            return positions.get(idx);
+        }
+    }
+
+    public Character localInsert(Float nextIdx, char value) {
         Float position = setCharPosition(nextIdx);
         Character c = new Character(value, position, new Version(this.getIdNode(), counter++));
         document.put(position, c);
         broadcastChar(c);
+        return(c);
     }
-    
+
     private Float setCharPosition(Float nextIdx) {
         if (document.size() == 0) {
+            positions.add(nextIdx);
             return nextIdx;
         }
         else if (nextIdx == Float.MAX_VALUE) {
-            return (float) ceil(document.lastKey()+1);
+            Float sol = (float) ceil(document.lastKey()+1);
+            positions.add(sol);
+            return sol;
         } else if (nextIdx.equals(document.firstKey())) {
-            return (float) floor(document.firstKey()-1);
+            Float sol = (float) floor(document.firstKey()-1);
+            positions.add(0, sol);
+            return sol;
         } else {
-          Float low = ((TreeMap<Float,Character>)document).lowerKey(nextIdx) != null ?
-              ((TreeMap<Float,Character>)document).lowerKey(nextIdx) : 0f;
-          return (low + nextIdx) / 2;
+            Float low = ((TreeMap<Float, Character>) document).lowerKey(nextIdx) != null ? ((TreeMap<Float, Character>) document).lowerKey(nextIdx) : 0f;
+            Float sol = (low + nextIdx) / 2;
+            positions.add(positions.indexOf(nextIdx), sol);
+            return sol;
         }
-
     }
     
-    public void localDelete(Float idx) {
+    public Character localDelete(Float idx) {
         Character c = document.remove(idx);
         Version version = new Version(idNode, counter++);
         c.delete(version);
         broadcastChar(c);
+        return(c);
     }
     
     private void broadcastChar(Character c) {

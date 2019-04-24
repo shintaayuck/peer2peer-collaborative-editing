@@ -7,13 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="p2p_crdt" />
         <module name="p2p-crdt" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="p2p-crdt" target="7" />
-      <module name="p2p_crdt" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
