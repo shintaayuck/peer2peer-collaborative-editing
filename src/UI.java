@@ -1,4 +1,5 @@
 import controller.Controller;
+import model.Character;
 import org.apache.log4j.BasicConfigurator;
 
 import java.awt.*;
@@ -69,6 +70,11 @@ class TextEditor extends JFrame implements ActionListener {
         frameEditor.show();
     }
 
+    public void insert(Character c, Integer idx) {
+        textArea.insert(String.valueOf(c.getValue()), idx);
+    }
+    
+    
 	private void actionCancelled(){
 		JOptionPane.showMessageDialog(frameEditor, "Cancelled !!");
 	}
