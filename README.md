@@ -43,11 +43,11 @@ Dari masukan yang telah diterima dari server, Controller penerima melakukan peng
 Setelah versi yang diperiksa telah valid dan sesuai, maka controller akan melakukan pengubahan data dan menampilkannya kembali dalam bentuk teks di GUI.
 
 #### Arsitektur Program :
-
+![Sister_Arsitektur](/uploads/8f018d6a52eb3c0c27c423bcbccac7e0/Sister_Arsitektur.png)
 
 ## Desain Struktur Data
 ### CRDT
-Struktur data
+Struktur data :
 <br>
 Penjelasan
 
