@@ -74,6 +74,9 @@ class TextEditor extends JFrame implements ActionListener {
         textArea.insert(String.valueOf(c.getValue()), idx);
     }
     
+    public void delete(Integer idx) {
+        textArea.replaceRange("",idx,idx+1);
+    }
     
 	private void actionCancelled(){
 		JOptionPane.showMessageDialog(frameEditor, "Cancelled !!");
