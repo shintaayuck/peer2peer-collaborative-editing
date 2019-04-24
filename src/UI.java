@@ -8,7 +8,7 @@ import javax.swing.text.*;
 class TextEditor extends JFrame implements ActionListener {
     JTextArea textArea; // Text component
     JFrame frameEditor; // Frame
-    String textCache; // save last Text version
+    String textCache = ""; // save last Text version
     // Constructor
     TextEditor(){
         // Create a frame
@@ -22,35 +22,38 @@ class TextEditor extends JFrame implements ActionListener {
         
         textArea = new JTextArea(); // Text component
         textArea.addKeyListener(new KeyListener() {
-			public void keyTyped(KeyEvent e){	
-                textCache = textArea.getText()+e.getKeyChar();
-				System.out.println(textCache);
+			public void keyTyped(KeyEvent e){
+                String textNow = textArea.getText();
+                if(textNow.length() != 0){
+                    System.out.println(textNow);
+                    textCache = textNow + e.getKeyChar();
+                }
+            }
+            public void keyPressed(KeyEvent e){ //Not used
 			}
-			public void keyPressed(KeyEvent e){
-			}
-			public void keyReleased(KeyEvent e){
+            public void keyReleased(KeyEvent e){ // Not used
 		    }			
 		});
         
         JMenuBar mb = new JMenuBar(); // Create a menubar
-        JMenu m1 = new JMenu("File"); // Create amenu for menu
+        JMenu m1 = new JMenu("File"); // Create a menu for menu
 
         // Create menu items
         JMenuItem mi1 = new JMenuItem("New");
         JMenuItem mi2 = new JMenuItem("Open");
         JMenuItem mi3 = new JMenuItem("Save");
-        JMenuItem mi9 = new JMenuItem("Print");
+        JMenuItem mx = new JMenuItem("Exit");
 
         // Add action listener
         mi1.addActionListener(this);
         mi2.addActionListener(this);
         mi3.addActionListener(this);
-        mi9.addActionListener(this);
+        mx.addActionListener(this);
 
         m1.add(mi1);
         m1.add(mi2);
         m1.add(mi3);
-        m1.add(mi9);
+        m1.add(mx);
 
         // Create amenu for menu
         JMenu m2 = new JMenu("Edit");
@@ -69,13 +72,8 @@ class TextEditor extends JFrame implements ActionListener {
         m2.add(mi5);
         m2.add(mi6);
 
-        JMenuItem mc = new JMenuItem("close");
-
-        mc.addActionListener(this);
-
         mb.add(m1);
         mb.add(m2);
-        mb.add(mc);
 
         frameEditor.setJMenuBar(mb);
         frameEditor.add(textArea);
@@ -134,15 +132,6 @@ class TextEditor extends JFrame implements ActionListener {
             else
                 actionCancelled();
         }
-        else if (s.equals("Print")) {
-            try {
-                // print the file
-                textArea.print();
-            }
-            catch (Exception evt) {
-                JOptionPane.showMessageDialog(frameEditor, evt.getMessage());
-            }
-        }
         else if (s.equals("Open")) {
             // Create an object of JFileChooser class
             JFileChooser j = new JFileChooser("f:");
@@ -178,7 +167,7 @@ class TextEditor extends JFrame implements ActionListener {
         else if (s.equals("New")) {
             textArea.setText("");
         }
-        else if (s.equals("close")) {
+        else if (s.equals("Exit")) {
             frameEditor.setVisible(false);
         }
     }
