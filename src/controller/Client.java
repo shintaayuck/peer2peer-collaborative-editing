@@ -1,11 +1,9 @@
 package controller;
 
 import model.Character;
-import model.Version;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-import javax.naming.ldap.Control;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,9 +38,10 @@ public class Client extends WebSocketClient {
         try {
             Character c = (Character) Converter.getObject(bytes);
             if (c.getInsert()) {
-                Controller.getCrdt().remoteInsert(c);
+                Controller.getTextEditor().insert(c, Controller.getCrdt().remoteInsert(c));
             } else {
                 Controller.getCrdt().remoteDelete(c);
+                Controller.getTextEditor().delete(Controller.getCrdt().remoteDelete(c));
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

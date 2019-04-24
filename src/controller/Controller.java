@@ -5,6 +5,7 @@ import model.Version;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 public class Controller {
     private static CRDT crdt;
     private static Messenger messenger;
-    private TextEditor textEditor;
+    private static TextEditor textEditor;
 
     public Controller(String host, Integer port) throws UnknownHostException {
         String id = "ws://" + host + ":" + port;
@@ -22,6 +23,8 @@ public class Controller {
         messenger = new Messenger(host, port);
         textEditor = new TextEditor();
     }
+
+    public static TextEditor getTextEditor() { return textEditor; }
 
     public static CRDT getCrdt() { return crdt; }
 
@@ -45,12 +48,11 @@ public class Controller {
         BasicConfigurator.configure();
 
         // NODE 1
-        Controller controller = new Controller("localhost", 40003);
-
+//        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40000);
+//        System.out.println(controller.getMessenger().getWebSocketAddress());
 //         NODE 2
-//        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40002);
-//        System.out.println(controller.messenger.getAddress());
-//        Messenger.ConnectToNode("ws://192.168.43.85:40000");
+        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40001);
+        Messenger.ConnectToNode("ws://10.5.25.161:40000");
 //        Thread.sleep(10000);
 //        controller.insert(0,'a');
 //        controller.insert(0,'b');
