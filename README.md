@@ -16,21 +16,18 @@
 ## Author & Pembagian Tugas
 
 - **13516029 Shinta Ayu Chandra Kemala** 
-<br>
   - CRDT dan operasi-operasi
   - Characters
   - Version
   - Integrasi GUI dan Controller 
   - Laporan
 - **13516110 Naufal Putra Pamungkas**
-<br>
   - WebSocket
   - Messenger
   - Controller
   - Laporan
   
 - **13516125 Aldo Azali** 
-<br>
   - GUI
   - Laporan
 
