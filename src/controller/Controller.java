@@ -38,6 +38,11 @@ public class Controller {
     public void delete(Integer idx) throws IOException {
         getMessenger().BroadcastObject(crdt.localDelete(crdt.getPositions(idx)));
     }
+    
+    public static void connect() throws URISyntaxException {
+        Messenger.ConnectToNode("ws://192.168.43.85:40002");
+        
+    }
 
     public static void main(String[] args) throws URISyntaxException, InterruptedException, IOException {
         BasicConfigurator.configure();
@@ -46,19 +51,19 @@ public class Controller {
 //        Controller controller = new Controller("localhost", 40002);
 
 //         NODE 2
-        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40000);
+        Controller controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40002);
 //        System.out.println(controller.messenger.getAddress());
-////        Messenger.ConnectToNode("ws://192.168.43.85:40001");
-        Thread.sleep(10000);
-        controller.insert(0,'a');
-        controller.insert(0,'b');
-        controller.insert(0,'c');
-        controller.insert(0,'a');
-        controller.insert(Integer.MAX_VALUE,'b');
-        controller.insert(0,'c');
-        
-        Thread.sleep(3000);
-        controller.delete(1);
+//        Messenger.ConnectToNode("ws://192.168.43.85:40000");
+//        Thread.sleep(10000);
+//        controller.insert(0,'a');
+//        controller.insert(0,'b');
+//        controller.insert(0,'c');
+//        controller.insert(0,'a');
+//        controller.insert(Integer.MAX_VALUE,'b');
+//        controller.insert(0,'c');
+//
+//        Thread.sleep(3000);
+//        controller.delete(1);
 ////        controller.delete(-1.0f);
     }
 }

@@ -1,7 +1,13 @@
+import controller.Controller;
+import org.apache.log4j.BasicConfigurator;
+
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;
 import java.awt.event.*;
+import java.net.InetAddress;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import javax.swing.plaf.metal.*;
 import javax.swing.text.*;
 
@@ -9,8 +15,16 @@ class TextEditor extends JFrame implements ActionListener {
     JTextArea textArea; // Text component
     JFrame frameEditor; // Frame
     String textCache = ""; // save last Text version
+    Controller controller;
     // Constructor
-    TextEditor(){
+    TextEditor() throws UnknownHostException {
+    
+        controller = new Controller(InetAddress.getLocalHost().getHostAddress(), 40001);
+        try {
+            controller.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         // Create a frame
         frameEditor = new JFrame("Text Editor");
         try {
@@ -23,59 +37,33 @@ class TextEditor extends JFrame implements ActionListener {
         textArea = new JTextArea(); // Text component
         textArea.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e){
-                String textNow = textArea.getText();
-                if(textNow.length() != 0){
-                    System.out.println(textNow);
-                    textCache = textNow + e.getKeyChar();
-                }
+
             }
             public void keyPressed(KeyEvent e){ //Not used
-			}
+                if (e.getExtendedKeyCode()!=8 && (e.getExtendedKeyCode() < 37 || e.getExtendedKeyCode() > 40)) {
+                    try {
+                        controller.insert(textArea.getCaretPosition(), e.getKeyChar());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.out.println("INSERT " + e.getKeyChar() + " on " + textArea.getCaretPosition());
+                }
+//                System.out.println(e.getExtendedKeyCode());
+            }
             public void keyReleased(KeyEvent e){ // Not used
-		    }			
+                if (e.getExtendedKeyCode()==8 && !textArea.getText().equals(textCache)) {
+                    try {
+                        controller.delete(textArea.getCaretPosition());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.out.println("DEL " + textArea.getCaretPosition());
+                }
+                textCache = textArea.getText();
+                System.out.println(textCache);
+            }
 		});
         
-        JMenuBar mb = new JMenuBar(); // Create a menubar
-        JMenu m1 = new JMenu("File"); // Create a menu for menu
-
-        // Create menu items
-        JMenuItem mi1 = new JMenuItem("New");
-        JMenuItem mi2 = new JMenuItem("Open");
-        JMenuItem mi3 = new JMenuItem("Save");
-        JMenuItem mx = new JMenuItem("Exit");
-
-        // Add action listener
-        mi1.addActionListener(this);
-        mi2.addActionListener(this);
-        mi3.addActionListener(this);
-        mx.addActionListener(this);
-
-        m1.add(mi1);
-        m1.add(mi2);
-        m1.add(mi3);
-        m1.add(mx);
-
-        // Create amenu for menu
-        JMenu m2 = new JMenu("Edit");
-
-        // Create menu items
-        JMenuItem mi4 = new JMenuItem("cut");
-        JMenuItem mi5 = new JMenuItem("copy");
-        JMenuItem mi6 = new JMenuItem("paste");
-
-        // Add action listener
-        mi4.addActionListener(this);
-        mi5.addActionListener(this);
-        mi6.addActionListener(this);
-
-        m2.add(mi4);
-        m2.add(mi5);
-        m2.add(mi6);
-
-        mb.add(m1);
-        mb.add(m2);
-
-        frameEditor.setJMenuBar(mb);
         frameEditor.add(textArea);
         frameEditor.setSize(500, 500);
         frameEditor.show();
@@ -174,8 +162,13 @@ class TextEditor extends JFrame implements ActionListener {
 
     // Main class
     public static void main(String args[]){
-        TextEditor editor = new TextEditor();
-        
-
+    BasicConfigurator.configure();
+        try {
+            TextEditor editor = new TextEditor();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    
+    
     }
 }
