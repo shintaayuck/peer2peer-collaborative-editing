@@ -33,6 +33,7 @@ Disarankan menggunakan IntelliJ untuk memudahkan proses menjalankan program
   - WebSocket
   - Messenger
   - Controller
+  - Integrasi GUI, Controller, dan Messenger
   - Laporan
   
 - **13516125 Aldo Azali** 
@@ -113,22 +114,22 @@ Namun *trade-off*nya adalah dibutuhkannya satu List tambahan untuk menyimpan kon
 
 ### Kasus Uji
 #### Kasus Uji 1
-Nama Kasus Uji
+Mengetikan kalimat pada salah satu node
 <br>
-Video
+
 
 #### Kasus Uji 2
-Nama Kasus Uji
+Mengetikan kalimat pada dua node bersamaan
 <br>
 Video
 
 #### Kasus Uji 3
-Nama Kasus Uji
+Menghapus kata pada salah satu node
 <br>
 Video
 
 
 #### Kasus Uji 4
-Nama Kasus Uji
+Menghapus kata pada satu node bersamaan dengan mengetikan kata di node lain
 <br>
 Video
