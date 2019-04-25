@@ -116,20 +116,22 @@ Namun *trade-off*nya adalah dibutuhkannya satu List tambahan untuk menyimpan kon
 #### Kasus Uji 1
 Mengetikan kalimat pada salah satu node
 <br>
-
+![Test Case 1](img/TC%201.PNG)
 
 #### Kasus Uji 2
 Mengetikan kalimat pada dua node bersamaan
 <br>
-Video
+![Test Case 2](img/TC%202.PNG)
 
 #### Kasus Uji 3
 Menghapus kata pada salah satu node
 <br>
-Video
+![Test Case 3](img/TC%203.PNG)
+
 
 
 #### Kasus Uji 4
 Menghapus kata pada satu node bersamaan dengan mengetikan kata di node lain
 <br>
-Video
+![Test Case 4](img/TC%204.PNG)
+
