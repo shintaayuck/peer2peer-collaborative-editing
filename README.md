@@ -51,9 +51,6 @@ Setelah dikirim, Port Penerima akan mendapatkan masukan dari broadcast server da
 Dari masukan yang telah diterima dari server, Controller penerima melakukan pengecekan versi pengubahan terlebih dahulu sebelum melakukan pengubahan karakter text pada program.
 Setelah versi yang diperiksa telah valid dan sesuai, maka controller akan melakukan pengubahan data CRDT secara remote dan menampilkannya kembali dalam bentuk teks di GUI.
 
-#### Arsitektur Program :
-![Sister_Arsitektur](/uploads/8f018d6a52eb3c0c27c423bcbccac7e0/Sister_Arsitektur.png)
-
 ## Desain Struktur Data
 ### CRDT
 CRDT berfungsi untuk mengelola Character yang disimpan pada node, termasuk menambahkan dan menghapus Character baik yang berasal dari user pada node terkait maupun dari node lain yang terhubung.
@@ -127,8 +124,6 @@ Mengetikan kalimat pada dua node bersamaan
 Menghapus kata pada salah satu node
 <br>
 ![Test Case 3](img/TC%203.PNG)
-
-
 
 #### Kasus Uji 4
 Menghapus kata pada satu node bersamaan dengan mengetikan kata di node lain
